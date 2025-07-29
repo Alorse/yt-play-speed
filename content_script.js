@@ -42,22 +42,30 @@
         playerControls.insertBefore(speedButton, playerControls.children[3]);
 
         speedButton.onclick = () => {
-            const settingsButton = document.querySelector('.ytp-settings-button');
-            if (!settingsButton) return;
+            // First timeout: Check and handle settings menu state
+            setTimeout(() => {
+                const settingsButton = document.querySelector('.ytp-settings-button');
+                if (!settingsButton) return;
 
-            const settingsPopup = document.querySelector('.ytp-popup.ytp-settings-menu');
+                const settingsPopup = document.querySelector('.ytp-popup.ytp-settings-menu');
+                
+                // If settings menu is already open, close it and exit
+                if (settingsPopup && settingsPopup.style.display === 'block') {
+                    settingsPopup.style.display = 'none';
+                    settingsButton.setAttribute('aria-expanded', 'false');
+                    return;
+                }
+                
+                // Open settings menu
+                settingsButton.click();
+            }, 50);
 
-            if (settingsPopup && settingsPopup.style.display === 'block') {
-                settingsPopup.style.display = 'none';
-                settingsButton.setAttribute('aria-expanded', 'false');
-                return;
-            }
-            
-            settingsButton.click();
-
+            // Second timeout: Find and click speed option
             setTimeout(() => {
                 const menuItems = document.querySelectorAll('.ytp-menuitem-label');
                 let speedMenuItem = null;
+                
+                // Find the playback speed menu item
                 for (const item of menuItems) {
                     if (item.innerText === 'Playback speed' || item.innerText === 'Velocidad de reproducción') {
                         speedMenuItem = item.parentElement;
@@ -66,23 +74,31 @@
                 }
 
                 if (speedMenuItem) {
+                    // Click the speed menu item to open speed options
                     speedMenuItem.click();
-                    const newSettingsPopup = document.querySelector('.ytp-popup.ytp-settings-menu');
-                    if (newSettingsPopup) {
-                        newSettingsPopup.style.display = 'block';
-                        newSettingsPopup.style.width = '370px';
-                        newSettingsPopup.style.height = '297px';
+                    
+                    // Ensure the settings popup stays open
+                    const settingsPopup = document.querySelector('.ytp-popup.ytp-settings-menu');
+                    const settingsButton = document.querySelector('.ytp-settings-button');
+                    
+                    if (settingsPopup && settingsButton) {
+                        settingsPopup.style.display = 'block';
                         settingsButton.setAttribute('aria-expanded', 'true');
                     }
                 } else {
-                    // If the speed menu item wasn't found, close the settings panel
-                    settingsButton.click();
+                    // If speed menu item not found, close the settings panel
+                    const settingsButton = document.querySelector('.ytp-settings-button');
+                    const settingsPopup = document.querySelector('.ytp-popup.ytp-settings-menu');
+                    
+                    if (settingsButton) {
+                        settingsButton.click();
+                    }
                     if (settingsPopup) {
                         settingsPopup.style.display = 'none';
-                        settingsButton.setAttribute('aria-expanded', 'false');
+                        settingsButton?.setAttribute('aria-expanded', 'false');
                     }
                 }
-            }, 50);
+            }, 150);
         };
 
         videoElement.addEventListener('ratechange', () => {
