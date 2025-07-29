@@ -39,7 +39,7 @@
         speedContainer.appendChild(speedIcon);
         speedContainer.appendChild(speedButtonLabel);
 
-        playerControls.insertBefore(speedButton, playerControls.children[3]);
+        playerControls.insertBefore(speedButton, playerControls.children[0]);
 
         speedButton.onclick = () => {
             // First timeout: Check and handle settings menu state

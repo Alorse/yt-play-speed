@@ -4,10 +4,12 @@
     width: 66px !important;
     vertical-align: top !important;
     display: inline-block !important;
+    text-align: center;
+    text-align: -webkit-center;
 }
 
 .ytp-speed-icon-container {
-    width: 48px;
+    width: 49px;
     height: 100%;
     display: flex !important;
     align-items: center !important;
