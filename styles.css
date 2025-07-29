@@ -1,4 +1,33 @@
 /* YouTube Playback Speed Controls Extension Styles */
-#youtube-speed-control-button {
-    position: relative;
+/* Speed button specific styles */
+.ytp-speed-button {
+    width: 66px !important;
+    vertical-align: top !important;
+    display: inline-block !important;
+}
+
+.ytp-speed-icon-container {
+    width: 48px;
+    height: 100%;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    vertical-align: top !important;
+}
+
+.ytp-speed-icon {
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 4px;
+}
+
+.ytp-speed-label {
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.ytp-speed-button .ytp-menuitem-icon{
+    padding: 0 !important;
 }
