@@ -3,6 +3,7 @@
 
     const BUTTON_ID = 'youtube-speed-control-button';
     const PS_TEXT = 'Playback speed';
+    const TOOLTIP_TEXT = PS_TEXT + ' (Shift + >/<)';
 
     function createSpeedControl() {
         if (document.getElementById(BUTTON_ID)) {
@@ -47,7 +48,7 @@
             if (tooltip) {
                 const tooltipText = tooltip.querySelector('.ytp-tooltip-text');
                 if (tooltipText) {
-                    tooltipText.textContent = PS_TEXT;
+                    tooltipText.textContent = TOOLTIP_TEXT;
                     tooltip.style.display = 'block';
                     
                     // Calculate tooltip position
