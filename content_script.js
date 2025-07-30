@@ -2,6 +2,7 @@
     'use strict';
 
     const BUTTON_ID = 'youtube-speed-control-button';
+    const PS_TEXT = 'Playback speed';
 
     function createSpeedControl() {
         if (document.getElementById(BUTTON_ID)) {
@@ -21,7 +22,6 @@
         const speedButton = document.createElement('button');
         speedButton.id = BUTTON_ID;
         speedButton.className = 'ytp-speed-button ytp-button';
-        speedButton.title = 'Playback Speed';
 
         const speedContainer = document.createElement('div');
         speedContainer.className = 'ytp-speed-icon-container';
@@ -40,6 +40,61 @@
         speedContainer.appendChild(speedButtonLabel);
 
         playerControls.insertBefore(speedButton, playerControls.children[0]);
+
+        // Function to show tooltip
+        const showTooltip = (e) => {
+            const tooltip = document.querySelector('.ytp-tooltip');
+            if (tooltip) {
+                const tooltipText = tooltip.querySelector('.ytp-tooltip-text');
+                if (tooltipText) {
+                    tooltipText.textContent = PS_TEXT;
+                    tooltip.style.display = 'block';
+                    
+                    // Calculate tooltip position
+                    const buttonRect = speedButton.getBoundingClientRect();
+                    const tooltipRect = tooltip.getBoundingClientRect();
+                    const screenWidth = window.innerWidth;
+                    
+                    // Calculate center position of the button
+                    const buttonCenter = buttonRect.left + (buttonRect.width / 2);
+                    
+                    // Calculate tooltip position (center it on the button)
+                    let tooltipLeft = buttonCenter - (tooltipRect.width / 2);
+                    
+                    // Ensure tooltip doesn't go off-screen
+                    if (tooltipLeft < 0) {
+                        tooltipLeft = 10; // Minimum margin from left
+                    } else if (tooltipLeft + tooltipRect.width > screenWidth) {
+                        tooltipLeft = screenWidth - tooltipRect.width - 10; // Minimum margin from right
+                    }
+                    
+                    tooltip.style.left = tooltipLeft + 'px';
+                }
+            }
+        };
+
+        // Function to hide tooltip
+        const hideTooltip = (e) => {
+            // Only hide if we're leaving the button area completely
+            if (!speedButton.contains(e.relatedTarget)) {
+                const tooltip = document.querySelector('.ytp-tooltip');
+                if (tooltip) {
+                    tooltip.style.display = 'none';
+                }
+            }
+        };
+
+        // Add tooltip functionality to button and all child elements
+        speedButton.addEventListener('mouseover', showTooltip);
+        speedButton.addEventListener('mouseleave', hideTooltip);
+        
+        // Also add to child elements to ensure it works everywhere
+        speedContainer.addEventListener('mouseover', showTooltip);
+        speedContainer.addEventListener('mouseleave', hideTooltip);
+        speedIcon.addEventListener('mouseover', showTooltip);
+        speedIcon.addEventListener('mouseleave', hideTooltip);
+        speedButtonLabel.addEventListener('mouseover', showTooltip);
+        speedButtonLabel.addEventListener('mouseleave', hideTooltip);
 
         speedButton.onclick = () => {
             // First timeout: Check and handle settings menu state
@@ -67,7 +122,7 @@
                 
                 // Find the playback speed menu item
                 for (const item of menuItems) {
-                    if (item.innerText === 'Playback speed' || item.innerText === 'Velocidad de reproducción') {
+                    if (item.innerText === PS_TEXT) {
                         speedMenuItem = item.parentElement;
                         break;
                     }
@@ -98,7 +153,7 @@
                         settingsButton?.setAttribute('aria-expanded', 'false');
                     }
                 }
-            }, 150);
+            }, 250);
         };
 
         videoElement.addEventListener('ratechange', () => {
